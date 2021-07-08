@@ -48,7 +48,14 @@ class Alko(AlkoBase):
         for device in self._devices:
             self._devices_dict[device.thingName] = device
 
-    async def update_device(self, device: AlkoDevice, ecoMode=None) -> ClientResponse:
+    async def update_device(
+        self, 
+        device: AlkoDevice, 
+        ecoMode=None,
+        rainSensor=None,
+        operationState=None,
+        rainDelay=None,
+    ) -> ClientResponse:
         """Update Device."""
         self.logger.debug("Update Device")
 
@@ -57,7 +64,14 @@ class Alko(AlkoBase):
         if ecoMode is not None:
             data["ecoMode"] = ecoMode
 
-        self.logger.debug(data)
+        if rainSensor is not None:
+            data["rainSensor"] = rainSensor
+
+        if rainDelay is not None:
+            data["rainDelay"] = rainDelay
+
+        if operationState is not None:
+            data["operationState"] = operationState
 
         return await self._client.patch(
             f"{BASE_URL}/{device.thingName}/state/desired",
