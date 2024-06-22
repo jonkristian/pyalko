@@ -37,7 +37,7 @@ class Alko(AlkoBase):
     async def get_devices(self) -> None:
         """Get Devices."""
         response: ClientResponse = await self._client.get(
-            f"{BASE_URL}?details=complete"
+            f"{BASE_URL}?pimInfo=&thingState=&accesses=&thingCategory="
         )
         json = await response.json()
         self.logger.debug(json)
@@ -49,7 +49,7 @@ class Alko(AlkoBase):
             self._devices_dict[device.thingName] = device
 
     async def update_device(
-        self, 
+        self,
         device: AlkoDevice,
         rtc=None,
         ecoMode=None,
