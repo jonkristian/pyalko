@@ -37,10 +37,9 @@ class Alko(AlkoBase):
     async def get_devices(self) -> None:
         """Get Devices."""
         response: ClientResponse = await self._client.get(
-            f"{BASE_URL}?pimInfo=&thingState=&accesses=&thingCategory="
+            f"{BASE_URL}?pimInfo=true&thingState=true&accesses=true"
         )
         json = await response.json()
-        self.logger.debug(json)
         self._devices = [
             AlkoDevice(self._client, thingName) for thingName in json or []
         ]

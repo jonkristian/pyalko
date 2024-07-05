@@ -2,17 +2,22 @@
 import async_timeout
 import logging
 
-from asyncio import get_event_loop
+import asyncio
 from aiohttp import ClientSession, ClientResponse
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 
 from .exceptions import AlkoAuthenticationException, AlkoException
 
 
-class AlkoClient(ABC):
+class AlkoClient:
     """Connection to AL-KO API."""
 
-    def __init__(self, session: ClientSession) -> None:
+    logger = logging.getLogger(__name__)
+
+    def __init__(
+        self,
+        session: ClientSession
+    ) -> None:
         """Initialize the auth."""
         self._session = session
 
@@ -20,7 +25,11 @@ class AlkoClient(ABC):
     async def async_get_access_token(self) -> str:
         """Return a valid access token."""
 
-    async def get(self, url: str, **kwargs) -> ClientResponse:
+    async def get(
+        self,
+        url: str,
+        **kwargs
+    ) -> ClientResponse:
         """Make a GET request."""
         return await self.request("GET", url, **kwargs)
 
@@ -28,7 +37,12 @@ class AlkoClient(ABC):
         """Make a PATCH request."""
         return await self.request("PATCH", url, **kwargs)
 
-    async def request(self, method, url, **kwargs) -> ClientResponse:
+    async def request(
+        self,
+        method,
+        url,
+        **kwargs
+    ) -> ClientResponse:
         """Make a request."""
         headers = kwargs.get("headers")
 
@@ -38,11 +52,10 @@ class AlkoClient(ABC):
             headers = dict(headers)
 
         access_token = await self.async_get_access_token()
-
         headers["authorization"] = f"Bearer {access_token}"
         headers["Content-Type"] = "application/json"
 
-        async with async_timeout.timeout(20):
+        async with asyncio.timeout(20):
             response: ClientResponse = await self._session.request(
                 method,
                 url,
