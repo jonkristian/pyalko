@@ -4,7 +4,7 @@ Asynchronous python client for AL-KO Robolinho Mowers.
 This package allows you to interact with AL-KO API to control your robolinho mower.
 
 Tested with:
-- AL-KO Robolinho 800W
+- AL-KO Robolinho Series
 
 ## Installation
 

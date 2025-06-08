@@ -56,6 +56,7 @@ class Alko(AlkoBase):
         rainSensor=None,
         operationState=None,
         thingNotification=None,
+        **kwargs
     ) -> ClientResponse:
         """Update Device."""
         self.logger.debug("Update Device")
@@ -79,6 +80,9 @@ class Alko(AlkoBase):
 
         if thingNotification is not None:
             data["thingNotification"] = thingNotification
+
+        # Add any additional kwargs to the data dictionary
+        data.update(kwargs)
 
         return await self._client.patch(
             f"{BASE_URL}/{device.thingName}/state/desired",
